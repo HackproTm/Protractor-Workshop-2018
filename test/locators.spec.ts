@@ -1,5 +1,5 @@
 import { browser } from 'protractor';
-import { PersonalInformationPage } from './../src/page/personal-information.page';
+import { PersonalInformationPage } from './../src/page';
 
 describe('when open Automation Practice', () => {
   beforeAll(async () => {
