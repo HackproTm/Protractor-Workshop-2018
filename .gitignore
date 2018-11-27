@@ -121,4 +121,7 @@ dist
 # Jasmine Reports
 reports/*
 
+# Temporal Folder
+temp/*
+
 # End of https://www.gitignore.io/api/node,windows,visualstudiocode
