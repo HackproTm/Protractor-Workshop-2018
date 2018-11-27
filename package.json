@@ -1,5 +1,5 @@
 {
-  "name": "workshop-protractor",
+  "name": "protractor-workshop-2018",
   "version": "1.0.0",
   "description": "This is a Workshop about Protractor",
   "main": "index.js",
@@ -7,9 +7,10 @@
     "clean": "rm -rf dist && rm -rf reports",
     "build": "npm run lint && npm run clean && tsc",
     "lint": "tslint --project tsconfig.json protractor/**/*.ts test/**/*.ts src/**/*.ts",
-    "test": "npm run test:headless",
+    "test": "npm run test:local",
     "test:local": "npm run build && protractor dist/protractor/local.config.js",
     "test:headless": "npm run build && protractor dist/protractor/headless.config.js",
+    "test:saucelabs": "npm run build && protractor dist/protractor/saucelabs.config.js",
     "postinstall": "webdriver-manager update --gecko false"
   },
   "keywords": [
