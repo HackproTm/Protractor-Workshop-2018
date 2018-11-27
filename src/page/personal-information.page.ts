@@ -2,6 +2,7 @@ import { browser, element, by, ElementFinder, ElementArrayFinder } from 'protrac
 import { resolve } from 'path';
 import { existsSync } from 'fs';
 import * as remote from 'selenium-webdriver/remote';
+import { DownloadService } from '../service/download.service';
 
 export class PersonalInformationPage {
   private tFirstName: ElementFinder;
@@ -10,6 +11,7 @@ export class PersonalInformationPage {
   private oExperience: ElementArrayFinder;
   private cProfession: ElementArrayFinder;
   private bUploadFile: ElementFinder;
+  private lDownloadFile: ElementFinder;
   private cTools: ElementArrayFinder;
   private lContinents: ElementArrayFinder;
   private lCommands: ElementArrayFinder;
@@ -22,6 +24,7 @@ export class PersonalInformationPage {
     this.oExperience = element.all(by.name('exp'));
     this.cProfession = element.all(by.name('profession'));
     this.bUploadFile = element(by.id('photo'));
+    this.lDownloadFile = element(by.linkText('Selenium Automation Hybrid Framework'));
     this.cTools = element.all(by.name('tool'));
     this.lContinents = element(by.id('continents')).all(by.tagName('option'));
     this.lCommands = element(by.id('selenium_commands')).all(by.tagName('option'));
@@ -38,6 +41,18 @@ export class PersonalInformationPage {
     }
   }
 
+  private async downloadFile() {
+    const link = await this.lDownloadFile.getAttribute('href');
+
+    const service = new DownloadService();
+    await service.downloadFile(link, 'Online-Store.zip');
+  }
+
+  public async getFilename(): Promise<string> {
+    const fullPath: string = await this.bUploadFile.getAttribute('value');
+    return fullPath.split(/(\\|\/)/g).pop();
+  }
+
   public async fillForm(personalInfo): Promise<void> {
     await this.tFirstName.sendKeys(personalInfo.firstName);
     await this.tLastName.sendKeys(personalInfo.lastName);
@@ -51,6 +66,9 @@ export class PersonalInformationPage {
     });
     if (personalInfo.file) {
       await this.uploadFile(personalInfo.file);
+    }
+    if (personalInfo.download) {
+      await this.downloadFile();
     }
     await personalInfo.tools.forEach((tool) => {
       this.cTools.filter(elem => elem.getAttribute('value').
