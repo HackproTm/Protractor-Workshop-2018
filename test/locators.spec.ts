@@ -8,12 +8,13 @@ describe('when open Automation Practice', () => {
 
   it('then should have a title', async () => {
     const personalInformationPage: PersonalInformationPage = new PersonalInformationPage();
-    await personalInformationPage.fillForm({
+    await personalInformationPage.submit({
       firstName: 'Alejandro',
       lastName: 'Perdomo',
       sex: 'Male',
       experience: 7,
       professions: ['Automation Tester'],
+      file: 'F:\\GitHub\\HackproTm\\Protractor-Workshop-2018\\resources\\anonymous.jpg',
       tools: ['Selenium Webdriver'],
       continent: 'South America',
       commands: [

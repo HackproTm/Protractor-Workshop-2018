@@ -1,4 +1,7 @@
-import { element, by, ElementFinder, ElementArrayFinder } from 'protractor';
+import { browser, element, by, ElementFinder, ElementArrayFinder } from 'protractor';
+import { resolve } from 'path';
+import { existsSync } from 'fs';
+import * as remote from 'selenium-webdriver/remote';
 
 export class PersonalInformationPage {
   private tFirstName: ElementFinder;
@@ -6,9 +9,11 @@ export class PersonalInformationPage {
   private oSex: ElementArrayFinder;
   private oExperience: ElementArrayFinder;
   private cProfession: ElementArrayFinder;
+  private bUploadFile: ElementFinder;
   private cTools: ElementArrayFinder;
   private lContinents: ElementArrayFinder;
   private lCommands: ElementArrayFinder;
+  private bSummit: ElementFinder;
 
   constructor () {
     this.tFirstName = element(by.name('firstname'));
@@ -16,9 +21,21 @@ export class PersonalInformationPage {
     this.oSex = element.all(by.name('sex'));
     this.oExperience = element.all(by.name('exp'));
     this.cProfession = element.all(by.name('profession'));
+    this.bUploadFile = element(by.id('photo'));
     this.cTools = element.all(by.name('tool'));
     this.lContinents = element(by.id('continents')).all(by.tagName('option'));
     this.lCommands = element(by.id('selenium_commands')).all(by.tagName('option'));
+    this.bSummit = element(by.id('submit'));
+  }
+
+  private async uploadFile(file: string): Promise<void> {
+    const fullPath = resolve(process.cwd(), file);
+
+    if (existsSync(fullPath)) {
+      await browser.setFileDetector(new remote.FileDetector());
+      await this.bUploadFile.sendKeys(fullPath);
+      await browser.setFileDetector(undefined);
+    }
   }
 
   public async fillForm(personalInfo): Promise<void> {
@@ -32,6 +49,9 @@ export class PersonalInformationPage {
       this.cProfession.filter(elem => elem.getAttribute('value').
         then(value => value === profession)).first().click();
     });
+    if (personalInfo.file) {
+      await this.uploadFile(personalInfo.file);
+    }
     await personalInfo.tools.forEach((tool) => {
       this.cTools.filter(elem => elem.getAttribute('value').
         then(value => value === tool)).first().click();
@@ -42,5 +62,10 @@ export class PersonalInformationPage {
       this.lCommands.filter(elem => elem.getAttribute('value').
         then(value => value === command)).first().click();
     });
+  }
+
+  public async submit(personalInfo): Promise<void> {
+    this.fillForm(personalInfo);
+    this.bSummit.click();
   }
 }
