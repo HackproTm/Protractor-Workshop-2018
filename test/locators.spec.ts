@@ -17,7 +17,7 @@ describe('when open Automation Practice', () => {
         sex: 'Male',
         experience: 7,
         professions: ['Automation Tester'],
-        file: 'F:\\GitHub\\HackproTm\\Protractor-Workshop-2018\\resources\\anonymous.jpg',
+        file: './resources/anonymous.jpg',
         download: true,
         tools: ['Selenium Webdriver'],
         continent: 'South America',
