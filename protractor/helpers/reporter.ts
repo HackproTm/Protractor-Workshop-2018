@@ -1,10 +1,10 @@
-import { SpecReporter } from 'jasmine-spec-reporter';
+import { SpecReporter, StacktraceOption } from 'jasmine-spec-reporter';
 const { AwesomeReport } = require('jasmine-awesome-report');
 
 export let reporter = () => {
   jasmine.getEnv().addReporter(new SpecReporter({
     spec: {
-      displayStacktrace: true
+      displayStacktrace: StacktraceOption.PRETTY
     }
   }));
 
